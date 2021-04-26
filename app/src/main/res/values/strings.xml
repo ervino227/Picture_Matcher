@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Picture Matcher</string>
+    <string name="matches_string">0 / 6 matches</string>
+    <string name="reset_button_label">Reset</string>
 </resources>

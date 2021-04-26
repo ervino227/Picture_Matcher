@@ -1,12 +1,10 @@
 package com.example.picturematcher
 
-import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.picturematcher.databinding.ActivityMainBinding
@@ -35,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private var image2: Int? = null
     private var score = 0
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
@@ -72,20 +71,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    var view1: View? = null
+    var view2: View? = null
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun compareImages(view: View) {
         if (image1 == null) {
+            view1 = view
+            view1?.foreground = null
             image1 = imagesMap[view]
+            Thread.sleep(500)
         }
         else {
+            view2 = view
+            view2?.foreground = null
             image2 = imagesMap[view]
             if (image1 == image2) {
-                Toast.makeText(this,"Found match!",Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"Found match!",Toast.LENGTH_SHORT).show()
                 addToScore()
                 image1 = null
                 image2 = null
             }
             else {
-                Toast.makeText(this,"No match", Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"No match", Toast.LENGTH_SHORT).show()
+                view1?.foreground = resources.getDrawable(R.drawable.forground_image)
+                view2?.foreground = resources.getDrawable(R.drawable.forground_image)
                 image1 = null
                 image2 = null
             }
@@ -94,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun addToScore() {
         score++
-        val myScore = findViewById<TextView>(R.id.score_view)
+        val myScore = binding.scoreView
         myScore.text = "$score / 6 matches"
     }
 }

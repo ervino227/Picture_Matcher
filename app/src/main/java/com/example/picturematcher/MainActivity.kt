@@ -1,5 +1,6 @@
 package com.example.picturematcher
 
+import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -70,6 +71,10 @@ class MainActivity : AppCompatActivity() {
             }
             index++
         }
+
+        binding.resetButton.setOnClickListener {
+            recreate()
+        }
     }
 
 
@@ -82,7 +87,6 @@ class MainActivity : AppCompatActivity() {
             view1 = view
             view1?.foreground = null
             image1 = imagesMap[view]
-            //Thread.sleep(500)
         }
         else {
             view2 = view
@@ -90,12 +94,16 @@ class MainActivity : AppCompatActivity() {
             image2 = imagesMap[view]
             if (image1 == image2) {
                 Toast.makeText(this,"Found match!",Toast.LENGTH_SHORT).show()
+                playRightSound()
+                view1?.isClickable = false
+                view2?.isClickable = false
                 addToScore()
                 image1 = null
                 image2 = null
             }
             else {
                 Toast.makeText(this,"No match", Toast.LENGTH_SHORT).show()
+                playWrongSound()
                 handler.postDelayed({
                     view1?.foreground = resources.getDrawable(R.drawable.forground_image)
                     view2?.foreground = resources.getDrawable(R.drawable.forground_image)
@@ -110,5 +118,14 @@ class MainActivity : AppCompatActivity() {
         score++
         val myScore = binding.scoreView
         myScore.text = "$score / 6 matches"
+    }
+
+    fun playRightSound() {
+        var rightSound = MediaPlayer.create(this, R.raw.right_sound)
+        rightSound.start()
+    }
+    fun playWrongSound() {
+        var wrongSound = MediaPlayer.create(this, R.raw.wrong_sound)
+        wrongSound.start()
     }
 }

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import com.example.picturematcher.databinding.ActivityMainBinding
 
@@ -27,6 +26,11 @@ private val images = mutableListOf<Int>(
 )
 
 class MainActivity : AppCompatActivity() {
+
+    val imagesMap = mutableMapOf<View, Int>()
+    var image1: Int? = null
+    var image2: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
@@ -34,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
         //setContentView(R.layout.activity_main)
 
+        imagesMap.clear()
         images.shuffle()
 
         var views2 = mutableListOf(
@@ -54,7 +59,23 @@ class MainActivity : AppCompatActivity() {
         var index = 0
         for (view in views2) {
             view.setImageResource(images[index])
+            imagesMap[view] = images[index]
+            view.setOnClickListener {
+                compareImages(it)
+            }
             index++
+        }
+    }
+
+    fun compareImages(view: View) {
+        if (image1 == null) {
+            image1 = imagesMap[view]
+        }
+        else {
+            image2 = imagesMap[view]
+            if (image1 == image2) {
+                Toast.makeText(this,"Found match!",Toast.LENGTH_LONG).show()
+            }
         }
     }
 }

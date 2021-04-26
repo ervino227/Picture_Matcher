@@ -26,6 +26,7 @@
         android:id="@+id/view_1"
         style="@style/image_size"
         android:layout_marginStart="16dp"
+        android:foreground="@drawable/forground_image"
         app:layout_constraintBottom_toBottomOf="@+id/view_2"
         app:layout_constraintEnd_toStartOf="@+id/view_2"
         app:layout_constraintHorizontal_bias="0.5"

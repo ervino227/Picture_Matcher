@@ -1,11 +1,14 @@
 package com.example.picturematcher
 
 import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.picturematcher.databinding.ActivityMainBinding
 
 private lateinit var binding: ActivityMainBinding
@@ -27,9 +30,10 @@ private val images = mutableListOf<Int>(
 
 class MainActivity : AppCompatActivity() {
 
-    val imagesMap = mutableMapOf<View, Int>()
-    var image1: Int? = null
-    var image2: Int? = null
+    private val imagesMap = mutableMapOf<View, Int>()
+    private var image1: Int? = null
+    private var image2: Int? = null
+    private var score = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +42,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
         //setContentView(R.layout.activity_main)
 
+        score = 0
         imagesMap.clear()
         images.shuffle()
 
-        var views2 = mutableListOf(
+        val views2 = mutableListOf(
             binding.view1,
             binding.view2,
             binding.view3,
@@ -67,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun compareImages(view: View) {
+    private fun compareImages(view: View) {
         if (image1 == null) {
             image1 = imagesMap[view]
         }
@@ -75,7 +80,21 @@ class MainActivity : AppCompatActivity() {
             image2 = imagesMap[view]
             if (image1 == image2) {
                 Toast.makeText(this,"Found match!",Toast.LENGTH_LONG).show()
+                addToScore()
+                image1 = null
+                image2 = null
+            }
+            else {
+                Toast.makeText(this,"No match", Toast.LENGTH_LONG).show()
+                image1 = null
+                image2 = null
             }
         }
+    }
+
+    private fun addToScore() {
+        score++
+        val myScore = findViewById<TextView>(R.id.score_view)
+        myScore.text = "$score / 6 matches"
     }
 }

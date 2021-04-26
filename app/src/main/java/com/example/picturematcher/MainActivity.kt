@@ -3,6 +3,7 @@ package com.example.picturematcher
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -74,13 +75,14 @@ class MainActivity : AppCompatActivity() {
 
     var view1: View? = null
     var view2: View? = null
+    val handler = Handler()
     @RequiresApi(Build.VERSION_CODES.M)
     private fun compareImages(view: View) {
         if (image1 == null) {
             view1 = view
             view1?.foreground = null
             image1 = imagesMap[view]
-            Thread.sleep(500)
+            //Thread.sleep(500)
         }
         else {
             view2 = view
@@ -94,8 +96,10 @@ class MainActivity : AppCompatActivity() {
             }
             else {
                 Toast.makeText(this,"No match", Toast.LENGTH_SHORT).show()
-                view1?.foreground = resources.getDrawable(R.drawable.forground_image)
-                view2?.foreground = resources.getDrawable(R.drawable.forground_image)
+                handler.postDelayed({
+                    view1?.foreground = resources.getDrawable(R.drawable.forground_image)
+                    view2?.foreground = resources.getDrawable(R.drawable.forground_image)
+                                    },1000)
                 image1 = null
                 image2 = null
             }
